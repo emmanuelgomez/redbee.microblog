@@ -1,7 +1,10 @@
 package com.redbee.microblog;
 
-import com.redbee.microblog.entity.AgentEntity;
+import com.redbee.microblog.controller.PostRepository;
+import com.redbee.microblog.controller.PostTravelerMentionsRepository;
+import com.redbee.microblog.controller.TravelerRepository;
 import com.redbee.microblog.entity.PostEntity;
+import com.redbee.microblog.entity.PostTravelerMentionsEntity;
 import com.redbee.microblog.entity.TravelerEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -23,44 +26,39 @@ public class DemoApplication {
     @Autowired
     private PostRepository postRepository;
     @Autowired
-    private AgentRepository agentRepository;
+    private PostTravelerMentionsRepository postTravelerMentionsRepository;
 
-    @RequestMapping("/")
+    /*@RequestMapping("/")
     public String home() {
-        TravelerEntity p = this.repository.findAll().iterator().next();
-        return "Hello plus mas " + p.getName() + "!";
-    }
+        //TravelerEntity p = this.repository.findAll().iterator().next();
+        return swagger-ui.html;
+    }*/
 
     @RequestMapping("/filldb")
     public String fillDB() {
-        try {
-            TravelerEntity t1=new TravelerEntity();
-            t1.setIdUser(1);
-            t1.setName("test");
-            this.repository.save(t1);
-        }
-        catch (Exception ex){
-            return "Traveler error"+ex.getMessage();
-        }
-        try {
-            AgentEntity agentEntity = new AgentEntity();
-            agentEntity.setName("agentSmith");
-            this.agentRepository.save(agentEntity);
-        }
-        catch (Exception ex){
-            return "Agent Error"+ex.getMessage();
-    }
-        try {
-            PostEntity postEntity =new PostEntity();
-            postEntity.setText("@newuser #some $dolar");
-            postEntity.setFlag("waiting");
-            this.postRepository.save(postEntity);
-            postEntity.setTravelerIdUser(1);
-            this.postRepository.save(postEntity);
-}
-        catch (Exception ex){
-            return "Post error"+ex.getMessage();
-                }
+        TravelerEntity travelerEntity = new TravelerEntity();
+        travelerEntity.setName("Paolo");
+        repository.save(travelerEntity);
+        TravelerEntity travelerMention = new TravelerEntity();
+        travelerMention.setName("Jose");
+        repository.save(travelerMention);
+        TravelerEntity travelerMention2 = new TravelerEntity();
+        travelerMention2.setName("Juan");
+        repository.save(travelerMention2);
+        PostEntity postEntity = new PostEntity();
+        postEntity.setText("Hola Mundo");
+        postEntity.setFlagWaiting();
+        postEntity.setTravelerByTravelerOwnerIdtraveler(travelerEntity);
+
+        postRepository.save(postEntity);
+        PostTravelerMentionsEntity postTravelerMentionsEntity = new PostTravelerMentionsEntity();
+        postTravelerMentionsEntity.setPostIdpost(postEntity.getIdpost());
+        postTravelerMentionsEntity.setTravelerIdtraveler(travelerMention.getIdtraveler());
+        postTravelerMentionsRepository.save(postTravelerMentionsEntity);
+        PostTravelerMentionsEntity postTravelerMentionsEntity1 = new PostTravelerMentionsEntity();
+        postTravelerMentionsEntity1.setPostIdpost(postEntity.getIdpost());
+        postTravelerMentionsEntity1.setTravelerIdtraveler(travelerMention2.getIdtraveler());
+        postTravelerMentionsRepository.save(postTravelerMentionsEntity1);
         return "Database filled";
     }
     public static void main(String[] args) throws Exception {
@@ -68,31 +66,6 @@ public class DemoApplication {
     }
 }
 
-@Repository
-interface TravelRepository extends CrudRepository<Travel, Long> {
-
-}
-
-@Entity
-class Travel {
-    @Id
-    @GeneratedValue
-    private String Name;
-
-    public String getName() {
-        return this.Name;
-    }
-
-    public void setName(String Name) {
-        this.Name = Name;
-    }
 
 
-    @Override
-    public String toString() {
-        return "Person [firstName=" + this.Name + "]";
-    }
-    
-
-}
 
