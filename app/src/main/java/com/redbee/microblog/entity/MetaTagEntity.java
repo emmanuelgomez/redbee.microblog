@@ -5,27 +5,28 @@ import java.util.Collection;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Meta_Tag", schema = "microblog", catalog = "")
+@Table(name = "meta_tag", schema = "microblog")
 public class MetaTagEntity {
-    private int idMetaTag;
+    private int idmetaTag;
     private String text;
     private String flag;
-    private int agentIdAgent;
-    private AgentEntity agentByAgentIdAgent;
-    private Collection<PostMetaTagEntity> postMetaTagsByIdMetaTag;
+    private int agentModeratorIdagent;
+    private AgentEntity agentByAgentModeratorIdagent;
+    private Collection<PostMetaTagMentionsEntity> postMetaTagMentionsByIdmetaTag;
 
     @Id
-    @Column(name = "idMeta_Tag")
-    public int getIdMetaTag() {
-        return idMetaTag;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "idmeta_tag", nullable = false)
+    public int getIdmetaTag() {
+        return idmetaTag;
     }
 
-    public void setIdMetaTag(int idMetaTag) {
-        this.idMetaTag = idMetaTag;
+    public void setIdmetaTag(int idmetaTag) {
+        this.idmetaTag = idmetaTag;
     }
 
     @Basic
-    @Column(name = "Text")
+    @Column(name = "text", length = 64)
     public String getText() {
         return text;
     }
@@ -35,7 +36,7 @@ public class MetaTagEntity {
     }
 
     @Basic
-    @Column(name = "Flag")
+    @Column(name = "flag", length = 45)
     public String getFlag() {
         return flag;
     }
@@ -45,13 +46,13 @@ public class MetaTagEntity {
     }
 
     @Basic
-    @Column(name = "Agent_idAgent")
-    public int getAgentIdAgent() {
-        return agentIdAgent;
+    @Column(name = "agent_moderator_idagent", nullable = false)
+    public int getAgentModeratorIdagent() {
+        return agentModeratorIdagent;
     }
 
-    public void setAgentIdAgent(int agentIdAgent) {
-        this.agentIdAgent = agentIdAgent;
+    public void setAgentModeratorIdagent(int agentModeratorIdagent) {
+        this.agentModeratorIdagent = agentModeratorIdagent;
     }
 
     @Override
@@ -59,8 +60,8 @@ public class MetaTagEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MetaTagEntity that = (MetaTagEntity) o;
-        return idMetaTag == that.idMetaTag &&
-                agentIdAgent == that.agentIdAgent &&
+        return idmetaTag == that.idmetaTag &&
+                agentModeratorIdagent == that.agentModeratorIdagent &&
                 Objects.equals(text, that.text) &&
                 Objects.equals(flag, that.flag);
     }
@@ -68,25 +69,25 @@ public class MetaTagEntity {
     @Override
     public int hashCode() {
 
-        return Objects.hash(idMetaTag, text, flag, agentIdAgent);
+        return Objects.hash(idmetaTag, text, flag, agentModeratorIdagent);
     }
 
     @ManyToOne
-    @JoinColumn(name = "Agent_idAgent", referencedColumnName = "idAgent", nullable = false, insertable = false, updatable = false)
-    public AgentEntity getAgentByAgentIdAgent() {
-        return agentByAgentIdAgent;
+    @JoinColumn(name = "agent_moderator_idagent", referencedColumnName = "idagent", nullable = false, insertable = false, updatable = false)
+    public AgentEntity getAgentByAgentModeratorIdagent() {
+        return agentByAgentModeratorIdagent;
     }
 
-    public void setAgentByAgentIdAgent(AgentEntity agentByAgentIdAgent) {
-        this.agentByAgentIdAgent = agentByAgentIdAgent;
+    public void setAgentByAgentModeratorIdagent(AgentEntity agentByAgentModeratorIdagent) {
+        this.agentByAgentModeratorIdagent = agentByAgentModeratorIdagent;
     }
 
-    @OneToMany(mappedBy = "metaTagByMetaTagIdMetaTag")
-    public Collection<PostMetaTagEntity> getPostMetaTagsByIdMetaTag() {
-        return postMetaTagsByIdMetaTag;
+    @OneToMany(mappedBy = "metaTagByMetaTagIdmetaTag")
+    public Collection<PostMetaTagMentionsEntity> getPostMetaTagMentionsByIdmetaTag() {
+        return postMetaTagMentionsByIdmetaTag;
     }
 
-    public void setPostMetaTagsByIdMetaTag(Collection<PostMetaTagEntity> postMetaTagsByIdMetaTag) {
-        this.postMetaTagsByIdMetaTag = postMetaTagsByIdMetaTag;
+    public void setPostMetaTagMentionsByIdmetaTag(Collection<PostMetaTagMentionsEntity> postMetaTagMentionsByIdmetaTag) {
+        this.postMetaTagMentionsByIdmetaTag = postMetaTagMentionsByIdmetaTag;
     }
 }

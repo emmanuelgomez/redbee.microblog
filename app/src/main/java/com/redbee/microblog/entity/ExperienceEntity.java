@@ -5,24 +5,25 @@ import java.util.Collection;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Experience", schema = "microblog", catalog = "")
+@Table(name = "experience", schema = "microblog")
 public class ExperienceEntity {
-    private int idExperience;
+    private int idexperience;
     private String text;
-    private Collection<PostExperienceEntity> postExperiencesByIdExperience;
+    private Collection<PostExperienceMentionsEntity> postExperienceMentionsByIdexperience;
 
     @Id
-    @Column(name = "idExperience")
-    public int getIdExperience() {
-        return idExperience;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "idexperience", nullable = false)
+    public int getIdexperience() {
+        return idexperience;
     }
 
-    public void setIdExperience(int idExperience) {
-        this.idExperience = idExperience;
+    public void setIdexperience(int idexperience) {
+        this.idexperience = idexperience;
     }
 
     @Basic
-    @Column(name = "Text")
+    @Column(name = "text", length = 64)
     public String getText() {
         return text;
     }
@@ -36,22 +37,22 @@ public class ExperienceEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ExperienceEntity that = (ExperienceEntity) o;
-        return idExperience == that.idExperience &&
+        return idexperience == that.idexperience &&
                 Objects.equals(text, that.text);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(idExperience, text);
+        return Objects.hash(idexperience, text);
     }
 
-    @OneToMany(mappedBy = "experienceByExperienceIdExperience")
-    public Collection<PostExperienceEntity> getPostExperiencesByIdExperience() {
-        return postExperiencesByIdExperience;
+    @OneToMany(mappedBy = "experienceByExperienceIdexperience")
+    public Collection<PostExperienceMentionsEntity> getPostExperienceMentionsByIdexperience() {
+        return postExperienceMentionsByIdexperience;
     }
 
-    public void setPostExperiencesByIdExperience(Collection<PostExperienceEntity> postExperiencesByIdExperience) {
-        this.postExperiencesByIdExperience = postExperiencesByIdExperience;
+    public void setPostExperienceMentionsByIdexperience(Collection<PostExperienceMentionsEntity> postExperienceMentionsByIdexperience) {
+        this.postExperienceMentionsByIdexperience = postExperienceMentionsByIdexperience;
     }
 }

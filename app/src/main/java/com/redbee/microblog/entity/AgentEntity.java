@@ -5,25 +5,26 @@ import java.util.Collection;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Agent", schema = "microblog", catalog = "")
+@Table(name = "agent", schema = "microblog")
 public class AgentEntity {
-    private int idAgent;
+    private int idagent;
     private String name;
-    private Collection<MetaTagEntity> metaTagsByIdAgent;
-    private Collection<PostEntity> postsByIdAgent;
+    private Collection<MetaTagEntity> metaTagsByIdagent;
+    private Collection<PostEntity> postsByIdagent;
 
     @Id
-    @Column(name = "idAgent")
-    public int getIdAgent() {
-        return idAgent;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "idagent", nullable = false)
+    public int getIdagent() {
+        return idagent;
     }
 
-    public void setIdAgent(int idAgent) {
-        this.idAgent = idAgent;
+    public void setIdagent(int idagent) {
+        this.idagent = idagent;
     }
 
     @Basic
-    @Column(name = "Name")
+    @Column(name = "name", length = 64)
     public String getName() {
         return name;
     }
@@ -37,31 +38,31 @@ public class AgentEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AgentEntity that = (AgentEntity) o;
-        return idAgent == that.idAgent &&
+        return idagent == that.idagent &&
                 Objects.equals(name, that.name);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(idAgent, name);
+        return Objects.hash(idagent, name);
     }
 
-    @OneToMany(mappedBy = "agentByAgentIdAgent")
-    public Collection<MetaTagEntity> getMetaTagsByIdAgent() {
-        return metaTagsByIdAgent;
+    @OneToMany(mappedBy = "agentByAgentModeratorIdagent")
+    public Collection<MetaTagEntity> getMetaTagsByIdagent() {
+        return metaTagsByIdagent;
     }
 
-    public void setMetaTagsByIdAgent(Collection<MetaTagEntity> metaTagsByIdAgent) {
-        this.metaTagsByIdAgent = metaTagsByIdAgent;
+    public void setMetaTagsByIdagent(Collection<MetaTagEntity> metaTagsByIdagent) {
+        this.metaTagsByIdagent = metaTagsByIdagent;
     }
 
-    @OneToMany(mappedBy = "agentByAgentIdAgent")
-    public Collection<PostEntity> getPostsByIdAgent() {
-        return postsByIdAgent;
+    @OneToMany(mappedBy = "agentByAgentModeratorIdagent")
+    public Collection<PostEntity> getPostsByIdagent() {
+        return postsByIdagent;
     }
 
-    public void setPostsByIdAgent(Collection<PostEntity> postsByIdAgent) {
-        this.postsByIdAgent = postsByIdAgent;
+    public void setPostsByIdagent(Collection<PostEntity> postsByIdagent) {
+        this.postsByIdagent = postsByIdagent;
     }
 }

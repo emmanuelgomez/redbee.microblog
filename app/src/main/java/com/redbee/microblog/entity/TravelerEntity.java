@@ -1,29 +1,32 @@
 package com.redbee.microblog.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Traveler", schema = "microblog", catalog = "")
+@Table(name = "traveler", schema = "microblog")
 public class TravelerEntity {
-    private int idUser;
+    private int idtraveler;
     private String name;
-    private Collection<PostEntity> postsByIdUser;
-    private Collection<PostTravelerEntity> postTravelersByIdUser;
+    private Collection<PostEntity> postsByIdtraveler;
+    private Collection<PostTravelerMentionsEntity> postTravelerMentionsByIdtraveler;
 
     @Id
-    @Column(name = "idUser")
-    public int getIdUser() {
-        return idUser;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "idtraveler", nullable = false)
+    public int getIdtraveler() {
+        return idtraveler;
     }
 
-    public void setIdUser(int idUser) {
-        this.idUser = idUser;
+    public void setIdtraveler(int idtraveler) {
+        this.idtraveler = idtraveler;
     }
 
     @Basic
-    @Column(name = "Name")
+    @Column(name = "name", length = 64)
     public String getName() {
         return name;
     }
@@ -37,31 +40,33 @@ public class TravelerEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TravelerEntity that = (TravelerEntity) o;
-        return idUser == that.idUser &&
+        return idtraveler == that.idtraveler &&
                 Objects.equals(name, that.name);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(idUser, name);
+        return Objects.hash(idtraveler, name);
     }
 
-    @OneToMany(mappedBy = "travelerByTravelerIdUser")
-    public Collection<PostEntity> getPostsByIdUser() {
-        return postsByIdUser;
+    @OneToMany(mappedBy = "travelerByTravelerOwnerIdtraveler", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    public Collection<PostEntity> getPostsByIdtraveler() {
+        return postsByIdtraveler;
     }
 
-    public void setPostsByIdUser(Collection<PostEntity> postsByIdUser) {
-        this.postsByIdUser = postsByIdUser;
+    public void setPostsByIdtraveler(Collection<PostEntity> postsByIdtraveler) {
+        this.postsByIdtraveler = postsByIdtraveler;
     }
 
-    @OneToMany(mappedBy = "travelerByTravelerIdUser")
-    public Collection<PostTravelerEntity> getPostTravelersByIdUser() {
-        return postTravelersByIdUser;
+    @OneToMany(mappedBy = "travelerByTravelerIdtraveler")
+    @JsonManagedReference
+    public Collection<PostTravelerMentionsEntity> getPostTravelerMentionsByIdtraveler() {
+        return postTravelerMentionsByIdtraveler;
     }
 
-    public void setPostTravelersByIdUser(Collection<PostTravelerEntity> postTravelersByIdUser) {
-        this.postTravelersByIdUser = postTravelersByIdUser;
+    public void setPostTravelerMentionsByIdtraveler(Collection<PostTravelerMentionsEntity> postTravelerMentionsByIdtraveler) {
+        this.postTravelerMentionsByIdtraveler = postTravelerMentionsByIdtraveler;
     }
 }

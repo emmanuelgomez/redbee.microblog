@@ -1,36 +1,45 @@
 package com.redbee.microblog.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Objects;
 
+enum PostFlag{waiting,appropriate,inappropriate}
+
 @Entity
-@Table(name = "Post", schema = "microblog", catalog = "")
+@Table(name = "post", schema = "microblog")
 public class PostEntity {
-    private int idPost;
+    private int idpost;
     private String text;
-    private int travelerIdUser;
-    private int agentIdAgent;
-    private String flag;
-    private TravelerEntity travelerByTravelerIdUser;
-    private AgentEntity agentByAgentIdAgent;
-    private Collection<PostExperienceEntity> postExperiencesByIdPost;
-    private Collection<PostMetaTagEntity> postMetaTagsByIdPost;
-    private Collection<PostNoExistingUserEntity> postNoExistingUsersByIdPost;
-    private Collection<PostTravelerEntity> postTravelersByIdPost;
+    private PostFlag flag;
+   // private int travelerOwnerIdtraveler;
+   // private int agentModeratorIdagent;
+    private TravelerEntity travelerByTravelerOwnerIdtraveler;
+    private AgentEntity agentByAgentModeratorIdagent;
+    private Collection<PostExperienceMentionsEntity> postExperienceMentionsByIdpost;
+    private Collection<PostMetaTagMentionsEntity> postMetaTagMentionsByIdpost;
+    private Collection<PostNoExistingUserMentionsEntity> postNoExistingUserMentionsByIdpost;
+    private Collection<PostTravelerMentionsEntity> postTravelerMentionsByIdpost;
 
     @Id
-    @Column(name = "idPost")
-    public int getIdPost() {
-        return idPost;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "idpost", nullable = false)
+    @ApiModelProperty(notes = "The database generated post ID")
+    public int getIdpost() {
+        return idpost;
     }
 
-    public void setIdPost(int idPost) {
-        this.idPost = idPost;
+    public void setIdpost(int idpost) {
+        this.idpost = idpost;
     }
 
     @Basic
-    @Column(name = "Text")
+    @Column(name = "text", length = 1024)
+    @ApiModelProperty(notes = "Content of the post")
     public String getText() {
         return text;
     }
@@ -40,43 +49,44 @@ public class PostEntity {
     }
 
     @Basic
-    @Column(name = "Traveler_idUser")
-    public int getTravelerIdUser() {
-        return travelerIdUser;
-    }
-
-    public void setTravelerIdUser(int travelerIdUser) {
-        this.travelerIdUser = travelerIdUser;
-    }
-
-    @Basic
-    @Column(name = "Agent_idAgent")
-    public int getAgentIdAgent() {
-        return agentIdAgent;
-    }
-
-    public void setAgentIdAgent(int agentIdAgent) {
-        this.agentIdAgent = agentIdAgent;
-    }
-
-    @Basic
-    @Column(name = "Flag")
-    public String getFlag() {
+    @Column(name = "flag", length = 50)
+    @ApiModelProperty(notes = "Agents most flag post as appropiate or innapropiate. By default is set to waiting")
+    public PostFlag getFlag() {
         return flag;
     }
 
-    public void setFlag(String flag) {
+    public void setFlag(PostFlag flag) {
         this.flag = flag;
     }
+
+   /* @Basic
+    @Column(name = "traveler_owner_idtraveler")
+    public int getTravelerOwnerIdtraveler() {
+        return travelerOwnerIdtraveler;
+    }
+
+    public void setTravelerOwnerIdtraveler(int travelerOwnerIdtraveler) {
+        this.travelerOwnerIdtraveler = travelerOwnerIdtraveler;
+    }
+
+    @Basic
+    @Column(name = "agent_moderator_idagent")
+    public int getAgentModeratorIdagent() {
+        return agentModeratorIdagent;
+    }
+
+    public void setAgentModeratorIdagent(int agentModeratorIdagent) {
+        this.agentModeratorIdagent = agentModeratorIdagent;
+    }*/
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PostEntity that = (PostEntity) o;
-        return idPost == that.idPost &&
-                travelerIdUser == that.travelerIdUser &&
-                agentIdAgent == that.agentIdAgent &&
+        return idpost == that.idpost &&
+                //travelerOwnerIdtraveler == that.travelerOwnerIdtraveler &&
+                //agentModeratorIdagent == that.agentModeratorIdagent &&
                 Objects.equals(text, that.text) &&
                 Objects.equals(flag, that.flag);
     }
@@ -84,62 +94,86 @@ public class PostEntity {
     @Override
     public int hashCode() {
 
-        return Objects.hash(idPost, text, travelerIdUser, agentIdAgent, flag);
+        return Objects.hash(idpost, text, flag
+               // , travelerOwnerIdtraveler, agentModeratorIdagent
+        );
     }
 
     @ManyToOne
-    @JoinColumn(name = "Traveler_idUser", referencedColumnName = "idUser", nullable = false, insertable = false, updatable = false)
-    public TravelerEntity getTravelerByTravelerIdUser() {
-        return travelerByTravelerIdUser;
+    @JsonBackReference
+    @JoinColumn(name = "traveler_owner_idtraveler", referencedColumnName = "idtraveler")
+    public TravelerEntity getTravelerByTravelerOwnerIdtraveler() {
+        return travelerByTravelerOwnerIdtraveler;
     }
 
-    public void setTravelerByTravelerIdUser(TravelerEntity travelerByTravelerIdUser) {
-        this.travelerByTravelerIdUser = travelerByTravelerIdUser;
+    public void setTravelerByTravelerOwnerIdtraveler(TravelerEntity travelerByTravelerOwnerIdtraveler) {
+        this.travelerByTravelerOwnerIdtraveler = travelerByTravelerOwnerIdtraveler;
     }
 
     @ManyToOne
-    @JoinColumn(name = "Agent_idAgent", referencedColumnName = "idAgent", nullable = false, insertable = false, updatable = false)
-    public AgentEntity getAgentByAgentIdAgent() {
-        return agentByAgentIdAgent;
+    @JoinColumn(name = "agent_moderator_idagent", referencedColumnName = "idagent")
+    @JsonBackReference
+    public AgentEntity getAgentByAgentModeratorIdagent() {
+        return agentByAgentModeratorIdagent;
     }
 
-    public void setAgentByAgentIdAgent(AgentEntity agentByAgentIdAgent) {
-        this.agentByAgentIdAgent = agentByAgentIdAgent;
+    public void setAgentByAgentModeratorIdagent(AgentEntity agentByAgentModeratorIdagent) {
+        this.agentByAgentModeratorIdagent = agentByAgentModeratorIdagent;
     }
 
-    @OneToMany(mappedBy = "postByPostIdPost")
-    public Collection<PostExperienceEntity> getPostExperiencesByIdPost() {
-        return postExperiencesByIdPost;
+    @OneToMany(mappedBy = "postByPostIdpost")
+    @ApiModelProperty(notes = "Travelers can hashtag experiences in their posts.")
+    @JsonManagedReference
+    public Collection<PostExperienceMentionsEntity> getPostExperienceMentionsByIdpost() {
+        return postExperienceMentionsByIdpost;
     }
 
-    public void setPostExperiencesByIdPost(Collection<PostExperienceEntity> postExperiencesByIdPost) {
-        this.postExperiencesByIdPost = postExperiencesByIdPost;
+    public void setPostExperienceMentionsByIdpost(Collection<PostExperienceMentionsEntity> postExperienceMentionsByIdpost) {
+        this.postExperienceMentionsByIdpost = postExperienceMentionsByIdpost;
     }
 
-    @OneToMany(mappedBy = "postByPostIdPost")
-    public Collection<PostMetaTagEntity> getPostMetaTagsByIdPost() {
-        return postMetaTagsByIdPost;
+    @OneToMany(mappedBy = "postByPostIdpost")
+    @ApiModelProperty(notes = "Travelers can hashtag metatags en their posts")
+    @JsonManagedReference
+    public Collection<PostMetaTagMentionsEntity> getPostMetaTagMentionsByIdpost() {
+        return postMetaTagMentionsByIdpost;
     }
 
-    public void setPostMetaTagsByIdPost(Collection<PostMetaTagEntity> postMetaTagsByIdPost) {
-        this.postMetaTagsByIdPost = postMetaTagsByIdPost;
+    public void setPostMetaTagMentionsByIdpost(Collection<PostMetaTagMentionsEntity> postMetaTagMentionsByIdpost) {
+        this.postMetaTagMentionsByIdpost = postMetaTagMentionsByIdpost;
     }
 
-    @OneToMany(mappedBy = "postByPostIdPost")
-    public Collection<PostNoExistingUserEntity> getPostNoExistingUsersByIdPost() {
-        return postNoExistingUsersByIdPost;
+    @OneToMany(mappedBy = "postByPostIdpost")
+    @ApiModelProperty(notes = "Travelers can mentions non existing users.")
+    @JsonManagedReference
+    public Collection<PostNoExistingUserMentionsEntity> getPostNoExistingUserMentionsByIdpost() {
+        return postNoExistingUserMentionsByIdpost;
     }
 
-    public void setPostNoExistingUsersByIdPost(Collection<PostNoExistingUserEntity> postNoExistingUsersByIdPost) {
-        this.postNoExistingUsersByIdPost = postNoExistingUsersByIdPost;
+    public void setPostNoExistingUserMentionsByIdpost(Collection<PostNoExistingUserMentionsEntity> postNoExistingUserMentionsByIdpost) {
+        this.postNoExistingUserMentionsByIdpost = postNoExistingUserMentionsByIdpost;
     }
 
-    @OneToMany(mappedBy = "postByPostIdPost")
-    public Collection<PostTravelerEntity> getPostTravelersByIdPost() {
-        return postTravelersByIdPost;
+    @OneToMany(mappedBy = "postByPostIdpost")
+    @JsonManagedReference
+    @ApiModelProperty(notes = "Travelers can mentions existing users.")
+    public Collection<PostTravelerMentionsEntity> getPostTravelerMentionsByIdpost() {
+        return postTravelerMentionsByIdpost;
     }
 
-    public void setPostTravelersByIdPost(Collection<PostTravelerEntity> postTravelersByIdPost) {
-        this.postTravelersByIdPost = postTravelersByIdPost;
+    public void setPostTravelerMentionsByIdpost(Collection<PostTravelerMentionsEntity> postTravelerMentionsByIdpost) {
+        this.postTravelerMentionsByIdpost = postTravelerMentionsByIdpost;
+    }
+
+    public void setFlagWaiting(){
+        this.flag = PostFlag.waiting;
+    }
+
+    public void setFlagAppropriate(){
+        this.flag = PostFlag.appropriate;
+    }
+
+    public void setFlagInappropriate(){
+        this.flag = PostFlag.inappropriate;
     }
 }

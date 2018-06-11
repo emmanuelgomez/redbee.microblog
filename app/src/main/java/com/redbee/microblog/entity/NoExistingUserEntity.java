@@ -5,24 +5,25 @@ import java.util.Collection;
 import java.util.Objects;
 
 @Entity
-@Table(name = "No_Existing_User", schema = "microblog", catalog = "")
+@Table(name = "no_existing_user", schema = "microblog")
 public class NoExistingUserEntity {
-    private int idnoExitingUser;
+    private int idnoExistingUser;
     private String name;
-    private Collection<PostNoExistingUserEntity> postNoExistingUsersByIdnoExitingUser;
+    private Collection<PostNoExistingUserMentionsEntity> postNoExistingUserMentionsByIdnoExistingUser;
 
     @Id
-    @Column(name = "idno_exiting_user")
-    public int getIdnoExitingUser() {
-        return idnoExitingUser;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "idno_existing_user", nullable = false)
+    public int getIdnoExistingUser() {
+        return idnoExistingUser;
     }
 
-    public void setIdnoExitingUser(int idnoExitingUser) {
-        this.idnoExitingUser = idnoExitingUser;
+    public void setIdnoExistingUser(int idnoExistingUser) {
+        this.idnoExistingUser = idnoExistingUser;
     }
 
     @Basic
-    @Column(name = "Name")
+    @Column(name = "name", length = 64)
     public String getName() {
         return name;
     }
@@ -36,22 +37,22 @@ public class NoExistingUserEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         NoExistingUserEntity that = (NoExistingUserEntity) o;
-        return idnoExitingUser == that.idnoExitingUser &&
+        return idnoExistingUser == that.idnoExistingUser &&
                 Objects.equals(name, that.name);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(idnoExitingUser, name);
+        return Objects.hash(idnoExistingUser, name);
     }
 
-    @OneToMany(mappedBy = "noExistingUserByNoExistingUserIdnoExitingUser")
-    public Collection<PostNoExistingUserEntity> getPostNoExistingUsersByIdnoExitingUser() {
-        return postNoExistingUsersByIdnoExitingUser;
+    @OneToMany(mappedBy = "noExistingUserByNoExistingUserIdnoExistingUser")
+    public Collection<PostNoExistingUserMentionsEntity> getPostNoExistingUserMentionsByIdnoExistingUser() {
+        return postNoExistingUserMentionsByIdnoExistingUser;
     }
 
-    public void setPostNoExistingUsersByIdnoExitingUser(Collection<PostNoExistingUserEntity> postNoExistingUsersByIdnoExitingUser) {
-        this.postNoExistingUsersByIdnoExitingUser = postNoExistingUsersByIdnoExitingUser;
+    public void setPostNoExistingUserMentionsByIdnoExistingUser(Collection<PostNoExistingUserMentionsEntity> postNoExistingUserMentionsByIdnoExistingUser) {
+        this.postNoExistingUserMentionsByIdnoExistingUser = postNoExistingUserMentionsByIdnoExistingUser;
     }
 }
