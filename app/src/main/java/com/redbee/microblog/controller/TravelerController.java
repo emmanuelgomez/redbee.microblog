@@ -1,4 +1,4 @@
-package com.redbee.microblog;
+package com.redbee.microblog.controller;
 
 import com.redbee.microblog.entity.TravelerEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,13 +6,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
-
-@Repository
-interface TravelerRepository extends CrudRepository<TravelerEntity, Integer> {
-
-}
 
 
 @RestController
